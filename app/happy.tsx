@@ -1,14 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useLocalSearchParams } from 'expo-router';
 
-export default function App() {
-    const navigation = useNavigation();
+export default function App({ route, navigation }) {
+    const params = useLocalSearchParams();
+    const { photo } = route.params;
+    console.log(photo);
+    //const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/images/Shirtforscan.png')} // Replace with your image path
+        source={{uri: photo }} // Replace with your image path
         style={styles.image}
         resizeMode="contain"
       />
