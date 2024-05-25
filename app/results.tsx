@@ -1,21 +1,32 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { router, useLocalSearchParams } from 'expo-router';
+import CustomButton from '@/components/CustomButton';
 
-export default function App() {
-    const navigation = useNavigation();
+export default function Results() {
+    const params = useLocalSearchParams();
+    const photo = params.photo;
+    const prediction = params.prediction;
 
   return (
-    <ScrollView style={styles.container}>
-      <TouchableOpacity style={styles.scanAgainButton} onPress={() => navigation.navigate('camera')}>
-        <Text style={styles.scanAgainText}>Scan Again</Text>
-      </TouchableOpacity>
+    <ScrollView className='bg-background pt-12'>
+      
       <Image
-        source={require('../assets/images/Shirtforscan.png')}
-        style={styles.mainImage}
-        resizeMode="contain"
+        source={{uri: photo }} // Replace with your image path
+        className='w-full h-[350px] rounded-3xl'
+        resizeMode="cover"
       />
-      <Text style={styles.resultText}>Results: Shirt</Text>
+      <View className='flex flex-row mx-4'>
+        <CustomButton
+          title="Scan Again"
+          handlePress={() => router.push('/camera')}
+          containerStyles=" flex-auto m-2 px-4"
+        />
+        <View className='flex-auto min-h-[62px] justify-center items-center'>
+          <Text className='text-white text-lg font-pregular'>Result: {prediction}</Text>
+        </View>
+      </View>
       <Text style={styles.categoryText}>Bottoms</Text>
       <ScrollView horizontal={true} style={styles.horizontalScroll}>
         {/* Repeat this View for each image */}
@@ -29,7 +40,7 @@ export default function App() {
           <Image source={require('../assets/images/pants.jpg')} style={styles.categoryImage} />
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.viewMoreButton} onPress={() => navigation.navigate('bottom')}>
+      <TouchableOpacity style={styles.viewMoreButton} onPress={() => router.push('\bottom')}>
         <Text style={styles.viewMoreText}>View More</Text>
       </TouchableOpacity>
       
@@ -124,5 +135,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   }
 });
-
-export default App;

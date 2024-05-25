@@ -1,52 +1,37 @@
 import React from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Button, View, Text, Image, StyleSheet,  } from 'react-native';
 
 import { CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
+import CustomButton from '@/components/CustomButton';
+import { StatusBar } from 'expo-status-bar';
+import { router, useRouter } from 'expo-router';
 
-// export default function App() {
-//     const navigation = useNavigation();
-//   return (
-//     <View style={styles.container}>
-    
-//       <ImageBackground 
-//         source={require('../assets/images/SHIRT.png')} // Update with the path to your image
-//         style={styles.image}
-//         resizeMode="cover"
-//       >
-//         <View style={styles.buttonContainer}>
-//           <TouchableOpacity style={{ marginBottom: 50, backgroundColor: 'blue', padding: 10, borderRadius: 5 }}
-//         onPress={() => navigation.navigate('happy')}>
-//             <Text style={styles.buttonText}>Take Photo</Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity style={{ marginBottom: 50, backgroundColor: 'blue', padding: 10, borderRadius: 5 }}>
-//             <Text style={styles.buttonText}>Choose From Gallery</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </ImageBackground>
-//     </View>
-//   );
-// };
 
 export default function CameraScreen() {
-    const navigation = useNavigation();
+    const router = useRouter();
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
-    const [cameraRef, setCameraRef] = useState(null);
+    const [cameraRef, setCameraRef] = useState<CameraView | null>(null);
 
     const takePhoto = async () => {
       if (cameraRef) {
-        let photo: CameraCapturedPicture = await cameraRef.takePictureAsync();
-        console.log(photo);
-        navigation.navigate('happy', { photo: photo });
+        let photo: CameraCapturedPicture | undefined = await (cameraRef as CameraView).takePictureAsync();
+        if (photo) {
+          console.log(photo);
+          router.push({pathname: "/happy", params: {photo: photo.uri}});
+        }
       }
     }
 
     if (!permission) {
       // Camera permissions are still loading.
-      return <View />;
+      return (
+        <View>
+          <Text className='text-center text-6xl'>Please allow camera permission</Text>
+        </View>
+      );
     }
 
     if (!permission.granted) {
@@ -64,16 +49,33 @@ export default function CameraScreen() {
     }
 
     return (
-      <View style={{ flex: 1}}>
-        <CameraView style={{flex: 2/3}} facing={facing} ref={(ref) => setCameraRef(ref)}>
+      <View className='flex-1 py-12 bg-background'>
+        <Text className='text-center text-white font-psemibold pb-3 text-lg'>Take a photo of the garment</Text>
+        <CameraView className='flex-1' facing={facing} ref={(ref) => setCameraRef(ref)}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-              <Text style={styles.buttonText}>Flip Camera</Text>
-            </TouchableOpacity>
+
+            <CustomButton 
+              title="Flip Camera" 
+              handlePress={toggleCameraFacing} 
+              containerStyles="m-2 px-4 py-2"
+            />
           </View>
         </CameraView>
-        <Button title="Take Photo" onPress={takePhoto} />
-        <Button title="Choose from Gallery" onPress={takePhoto} />
+
+        <CustomButton 
+          title="Take Photo" 
+          handlePress={takePhoto} 
+          containerStyles="m-5"
+        />
+        
+        <CustomButton 
+          title="Choose from gallery" 
+          handlePress={takePhoto} 
+          containerStyles="m-5 mt-0"
+        />
+        
+        <StatusBar style="light" />
+
       </View>
     );
   }

@@ -1,4 +1,3 @@
-import { StyleSheet, View, Text } from 'react-native';
 import React, { useEffect } from 'react';
 import { Slot, SplashScreen, Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
@@ -8,6 +7,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 
+  // Load the fonts
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
@@ -20,9 +20,11 @@ export default function RootLayout() {
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
 
+  // Use effects are used when the page is loading
   useEffect (() => {
     if (error) throw error;
-    if (!fontsLoaded) SplashScreen.hideAsync();
+    // Show the splash screen when the fonts are loaded
+    if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error])
 
   if (!fontsLoaded && !error) return null;
@@ -30,6 +32,11 @@ export default function RootLayout() {
   return (
     <Stack> 
       <Stack.Screen name="index" options={{headerShown:false}}/>
+      <Stack.Screen name="profile" options={{headerShown:false}}/>
+      <Stack.Screen name="camera" options={{headerShown:false}}/>
+      <Stack.Screen name="happy" options={{headerShown:false}}/>
+      <Stack.Screen name="generating" options={{headerShown:false}}/>
+      <Stack.Screen name="results" options={{headerShown:false}}/>
     </Stack>
   )
 

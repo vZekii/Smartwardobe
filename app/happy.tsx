@@ -1,81 +1,46 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useLocalSearchParams } from 'expo-router';
+import { View, Text, Image } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import CustomButton from '@/components/CustomButton';
 
-export default function App({ route, navigation }) {
+export default function Happy() {
     const params = useLocalSearchParams();
-    const { photo } = route.params;
-    console.log(photo);
-    //const navigation = useNavigation();
+    const photo = params.photo;
+
 
   return (
-    <View style={styles.container}>
+    <View className="bg-background flex-1 py-12">
       <Image
         source={{uri: photo }} // Replace with your image path
-        style={styles.image}
-        resizeMode="contain"
+        className='w-full h-[450px] rounded-3xl'
       />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('camera')}>
-          <Text style={styles.buttonText}>Scan Again</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.instructionText}>Click to Populate Results</Text>
-      <View style={styles.genderButtonContainer}>
-        <TouchableOpacity style={styles.genderButton} onPress={() => navigation.navigate('generating')}>
-          <Text style={styles.buttonText}>Men</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.genderButton}>
-          <Text style={styles.buttonText}>Female</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.genderButton}>
-          <Text style={styles.buttonText}>Show All</Text>
-        </TouchableOpacity>
-      </View>
+
+      <CustomButton 
+        title="Scan Again" 
+        handlePress={() => router.push('/camera')} 
+        containerStyles="mx-8 mt-8"
+        />
+
+      <Text className='text-center text-white text-xl m-8 font-psemibold'>Click to Populate Results</Text>
+
+      <View className='flex flex-row justify-center mx-2'>
+        <CustomButton 
+          title="Men"
+          handlePress={() => router.push({pathname: "/generating", params: {photo: photo}})}
+          containerStyles="flex-auto m-2 px-4"
+          />
+        <CustomButton
+          title="Female"
+          handlePress={() => router.push({pathname: "/generating", params: {photo: photo}})}
+          containerStyles="flex-auto m-2 px-4"
+          />
+        <CustomButton
+          title="Show All"
+          handlePress={() => router.push({pathname: "/generating", params: {photo: photo}})}
+          containerStyles="flex-auto m-2 px-4"
+          />
+          </View>
+
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    width: '80%',
-    height: '40%',
-    marginBottom: 20,
-  },
-  buttonContainer: {
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: 'blue',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  instructionText: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  genderButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-  },
-  genderButton: {
-    backgroundColor: 'blue',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginHorizontal: 10,
-  },
-});
