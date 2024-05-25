@@ -7,6 +7,7 @@ import CustomButton from '@/components/CustomButton';
 export default function Results() {
     const params = useLocalSearchParams();
     const photo = params.photo;
+    const prediction = params.prediction;
 
   return (
     <ScrollView className='bg-background pt-12'>
@@ -23,7 +24,7 @@ export default function Results() {
           containerStyles=" flex-auto m-2 px-4"
         />
         <View className='flex-auto min-h-[62px] justify-center items-center'>
-          <Text className='text-white text-lg font-pregular'>Result: Shirt</Text>
+          <Text className='text-white text-lg font-pregular'>Result: {prediction}</Text>
         </View>
       </View>
       <Text style={styles.categoryText}>Bottoms</Text>

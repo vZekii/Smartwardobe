@@ -9,23 +9,35 @@ export default function Generating() {
   const photo = params.photo;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [prediction, setPrediction] = React.useState(null);
 
   const detect = async () => {
     setIsLoading(true);
+
+    let formData: FormData = new FormData();
+
+    // Append the photo to the form data
+    formData.append('image', {
+      uri: photo,
+      type: 'image/jpeg', // or your image type
+      name: 'photo.jpg', // or your image name
+    });
+
     // Call the API to generate styles
-    await fetch('http://192.168.20.15:5000/generate-styles', {
+    await fetch('http://192.168.20.15:8000/predict/', {
       method: 'POST',
-      body: JSON.stringify({ photo }),
+      body: formData,
       headers: {
-      'Content-Type': 'application/json'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     })
       .then(response => {
-        console.log(response);
+        console.log('Response:', response);
         return response.json();
       })
       .then(data => {
-        console.log(data);
+        console.log('Success:', data);
+        setPrediction(data.predictions)
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -51,7 +63,7 @@ export default function Generating() {
       
       <CustomButton
         title="View Results"
-        handlePress={() => router.push({pathname: "/results", params: {photo: photo}})}
+        handlePress={() => router.push({pathname: "/results", params: {photo: photo, prediction: prediction}})}
         containerStyles="mx-8 mt-12"
         isLoading={isLoading}
         />
