@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
+import { detectImage } from './api';
+
 
 export default function Generating() {
 
@@ -12,48 +14,64 @@ export default function Generating() {
   const [prediction, setPrediction] = React.useState(null);
   const [error, setError] = React.useState<string | null>(null);
 
-
+  
   const detect = async () => {
     setIsLoading(true);
     setError(null); // Reset the error state
-
-    let formData: FormData = new FormData();
-
-    const headers = new Headers();
-    headers.set('Content-Type', 'multipart/form-data');
-
-    // Append the photo to the form data
-    formData.append('image', {
-      uri: photo,
-      type: 'image/jpeg', // or your image type
-      name: 'photo.jpg', // or your image name
-    });
-
-    // Call the API to generate styles
-    await fetch('https://colt-great-poorly.ngrok-free.app/predict/', {
-      method: 'POST',
-      body: formData,
-      headers: headers
-    })
-      .then(response => {
-        console.log('Response:', response);
-        if (response.status !== 200) {
-          //setError('Failed to generate styles');
-          throw new Error('Failed to generate styles');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Success:', data);
-        setPrediction(data.predictions)
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-      
-    // await new Promise(resolve => setTimeout(resolve, 3000));
+  
+    try {
+      const data = await detectImage(photo);
+      console.log('Success:', data);
+      setPrediction(data.predictions);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  
     setIsLoading(false);
   }
+
+  // Keeping below code for now just in case
+  // const detect = async () => {
+  //   setIsLoading(true);
+  //   setError(null); // Reset the error state
+
+  //   let formData: FormData = new FormData();
+
+  //   const headers = new Headers();
+  //   headers.set('Content-Type', 'multipart/form-data');
+
+  //   // Append the photo to the form data
+  //   formData.append('image', {
+  //     uri: photo,
+  //     type: 'image/jpeg', // or your image type
+  //     name: 'photo.jpg', // or your image name
+  //   });
+
+  //   // Call the API to generate styles
+  //   await fetch('https://colt-great-poorly.ngrok-free.app/predict/', {
+  //     method: 'POST',
+  //     body: formData,
+  //     headers: headers
+  //   })
+  //     .then(response => {
+  //       console.log('Response:', response);
+  //       if (response.status !== 200) {
+  //         //setError('Failed to generate styles');
+  //         throw new Error('Failed to generate styles');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       console.log('Success:', data);
+  //       setPrediction(data.predictions)
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error:', error);
+  //     });
+      
+  //   // await new Promise(resolve => setTimeout(resolve, 3000));
+  //   setIsLoading(false);
+  // }
 
   // Try to detect the image when the page loads
   React.useEffect(() => {
