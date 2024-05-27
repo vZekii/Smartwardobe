@@ -1,8 +1,9 @@
+import { Picture } from "./types";
 
 // const API_URL = 'https://colt-great-poorly.ngrok-free.app';
 const API_URL = 'http://192.168.20.15:8000';
 
-export async function detectImage(photo: string) {
+export async function detectImage(photo: string, gender: string) {
   let formData: FormData = new FormData();
 
   const headers = new Headers();
@@ -16,7 +17,7 @@ export async function detectImage(photo: string) {
   });
 
   // Call the API to generate styles
-  const response = await fetch(`${API_URL}/predict/`, {
+  const response = await fetch(`${API_URL}/predict/?gender=${gender}`, {
     method: 'POST',
     body: formData,
     headers: headers
@@ -28,3 +29,19 @@ export async function detectImage(photo: string) {
 
   return response.json();
 }
+
+export const fetchItems = async (page = 1, type="", color="", gender="") => {
+    try {
+      // const response = await fetch(`${API_URL}/pictures/?color=${color}&type=${type}&gender=${gender}&page=${page}`);
+      const response = await fetch(`${API_URL}/pictures/?color=black&type=coat_jacket&gender="male"&page=1`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('Data:', data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching items:", error);
+      throw error;
+    }
+  };

@@ -9,9 +9,12 @@ export default function Generating() {
 
   const params = useLocalSearchParams();
   const photo = params.photo;
+  const gender = params.gender;
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [prediction, setPrediction] = React.useState(null);
+  const [reccomended_types, SetReccomendedTypes] = React.useState([]); // ['coat_jacket', 'sweater', 'tshirt', 'shirt', 'jeans']
+  const [color, setColor] = React.useState('black'); 
   const [error, setError] = React.useState<string | null>(null);
 
   
@@ -20,58 +23,17 @@ export default function Generating() {
     setError(null); // Reset the error state
   
     try {
-      const data = await detectImage(photo);
+      const data = await detectImage(photo, gender);
       console.log('Success:', data);
       setPrediction(data.predictions);
+      SetReccomendedTypes(data.reccomended_types);
+      setColor(data.color);
     } catch (error) {
       console.error('Error:', error);
     }
   
     setIsLoading(false);
   }
-
-  // Keeping below code for now just in case
-  // const detect = async () => {
-  //   setIsLoading(true);
-  //   setError(null); // Reset the error state
-
-  //   let formData: FormData = new FormData();
-
-  //   const headers = new Headers();
-  //   headers.set('Content-Type', 'multipart/form-data');
-
-  //   // Append the photo to the form data
-  //   formData.append('image', {
-  //     uri: photo,
-  //     type: 'image/jpeg', // or your image type
-  //     name: 'photo.jpg', // or your image name
-  //   });
-
-  //   // Call the API to generate styles
-  //   await fetch('https://colt-great-poorly.ngrok-free.app/predict/', {
-  //     method: 'POST',
-  //     body: formData,
-  //     headers: headers
-  //   })
-  //     .then(response => {
-  //       console.log('Response:', response);
-  //       if (response.status !== 200) {
-  //         //setError('Failed to generate styles');
-  //         throw new Error('Failed to generate styles');
-  //       }
-  //       return response.json();
-  //     })
-  //     .then(data => {
-  //       console.log('Success:', data);
-  //       setPrediction(data.predictions)
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error:', error);
-  //     });
-      
-  //   // await new Promise(resolve => setTimeout(resolve, 3000));
-  //   setIsLoading(false);
-  // }
 
   // Try to detect the image when the page loads
   React.useEffect(() => {
@@ -89,7 +51,7 @@ export default function Generating() {
 
       {!error && <CustomButton
         title="View Results"
-        handlePress={() => router.push({pathname: "/results", params: {photo: photo, prediction: prediction}})}
+        handlePress={() => router.push({pathname: "/results", params: {photo: photo, prediction: prediction, gender: gender, reccomended_types: reccomended_types, color: color}})}
         containerStyles="mx-8 mt-12"
         isLoading={isLoading}
         /> }

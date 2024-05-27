@@ -26,17 +26,17 @@ export default function Happy() {
       <View className='flex flex-row justify-center mx-2'>
         <CustomButton 
           title="Male"
-          handlePress={() => router.push({pathname: "/generating", params: {photo: photo}})}
+          handlePress={() => router.push({pathname: "/generating", params: {photo: photo, gender: "male"}})}
           containerStyles="flex-auto m-2 px-4"
           />
         <CustomButton
           title="Female"
-          handlePress={() => router.push({pathname: "/generating", params: {photo: photo}})}
+          handlePress={() => router.push({pathname: "/generating", params: {photo: photo, gender: "female"}})}
           containerStyles="flex-auto m-2 px-4"
           />
         <CustomButton
           title="Unisex"
-          handlePress={() => router.push({pathname: "/generating", params: {photo: photo}})}
+          handlePress={() => router.push({pathname: "/generating", params: {photo: photo, gender: "unisex"}})}
           containerStyles="flex-auto m-2 px-4"
           />
           </View>
