@@ -124,7 +124,7 @@ export default function Results() {
 
               ))}
             </ScrollView>
-            <
+            
             <CustomButton
               title="View More"
               handlePress={() => router.push('/bottom')}
