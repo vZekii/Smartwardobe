@@ -25,7 +25,7 @@ export default function ProductList() {
   const loadItems = async (page, clothing_type) => {
     setLoading(true);
     try {
-      const data = await fetchItems(page, clothing_type, "black", gender, true);
+      const data = await fetchItems(page, clothing_type, "black", gender);
       setTotalPages(data.count / items_per_page);
       setTotalResults(data.count);
       setItems(prevItems => [...prevItems, ...data.results]);

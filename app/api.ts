@@ -1,7 +1,7 @@
 import { Picture } from "./types";
 
-const API_URL = 'https://colt-great-poorly.ngrok-free.app';
-//const API_URL = 'http://192.168.20.15:8000';
+//const API_URL = 'https://colt-great-poorly.ngrok-free.app';
+const API_URL = 'http://192.168.20.15:8000';
 
 export async function detectImage(photo: string, gender: string) {
   let formData: FormData = new FormData();
@@ -33,8 +33,8 @@ export async function detectImage(photo: string, gender: string) {
 export const fetchItems = async (page = 1, clothing_type="", color="", gender="", testing=false) => {
   if (!testing) {  
     try {
-        // const response = await fetch(`${API_URL}/pictures/?color=${color}&type=${clothing_type}&gender=${gender}&page=${page}`);
-        const response = await fetch(`${API_URL}/pictures/?color=black&type=coat_jacket&gender="male"&page=1`);
+        const response = await fetch(`${API_URL}/pictures/?color=${color}&type=${clothing_type}&gender=${gender}&page=${page}`);
+        //const response = await fetch(`${API_URL}/pictures/?color=black&type=coat_jacket&gender="male"&page=1`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
