@@ -37,6 +37,8 @@ export default function RootLayout() {
       <Stack.Screen name="happy" options={{headerShown:false}}/>
       <Stack.Screen name="generating" options={{headerShown:false}}/>
       <Stack.Screen name="results" options={{headerShown:false}}/>
+      <Stack.Screen name="productlist" options={{headerShown:false}}/>
+      <Stack.Screen name="buynow" options={{headerShown:false}}/>
     </Stack>
   )
 

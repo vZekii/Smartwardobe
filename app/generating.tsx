@@ -5,6 +5,7 @@ import CustomButton from '@/components/CustomButton';
 import { detectImage } from './api';
 
 
+
 export default function Generating() {
 
   const params = useLocalSearchParams();

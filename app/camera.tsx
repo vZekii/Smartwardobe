@@ -25,6 +25,21 @@ export default function CameraScreen() {
       }
     }
 
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+    
+      console.log(result);
+    
+      if (!result.cancelled) {
+        router.push({pathname: "/happy", params: {photo: result.uri}});
+      }
+    };
+
     if (!permission) {
       // Camera permissions are still loading.
       return (
@@ -70,7 +85,7 @@ export default function CameraScreen() {
         
         <CustomButton 
           title="Choose from gallery" 
-          handlePress={takePhoto} 
+          handlePress={pickImage} 
           containerStyles="m-5 mt-0"
         />
         

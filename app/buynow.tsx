@@ -1,22 +1,31 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, StyleSheet, Image, TouchableOpacity, Text , Linking} from 'react-native';
+import { Link, router, useLocalSearchParams } from 'expo-router';
+import CustomButton from '@/components/CustomButton';
 
-export default function App() {
-  const navigation = useNavigation();
+
+export default function BuyNow() {
+  const params = useLocalSearchParams();
+  const brand = params.brand;
+  const name = params.name;
+  const image_url = params.image_url;
+  const purchase_link = params.purchase_link;
+  
   return (
-    <View style={styles.container}>
+    <View className='bg-background flex-1 px-4'>
       <Image
-        source={require('../assets/images/pants.jpg')} // Replace with your actual image path
-        style={styles.image}
-        resizeMode="contain"
+        source={{uri: image_url}} // Replace with your actual image path
+        className='w-full h-[600px] rounded-xl mt-10 mx-auto'
       />
-      <TouchableOpacity style={styles.button} onPress={() => alert('Buy Now button clicked!')}>
-        <Text style={styles.buttonText}>BUY NOW</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('bottom')}>
-        <Text style={styles.buttonText}>Back to Browse</Text>
-      </TouchableOpacity>
+      <Text className='text-white text-center text-2xl font-psemibold pt-2'>{name}</Text>
+      <Text className='text-white text-center text-base font-pregular pb-5'>{brand}</Text>
+      <CustomButton
+        title="Buy Now"
+        handlePress={() => Linking.openURL(purchase_link)}
+        containerStyles="mx-8"
+        isLoading={false}
+        />
+
     </View>
   );
 };
@@ -55,4 +64,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;

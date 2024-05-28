@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { router, useLocalSearchParams } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
 import { fetchItems } from './api';
@@ -61,17 +60,17 @@ export default function Results() {
     React.useEffect(() => {
       // Load the items when the page loads
       console.log('reccomended_types:', reccomended_types);
-      reccomended_types.forEach(type => {
-        loadItems(page, type);
+      reccomended_types.forEach(clothing_type => {
+        loadItems(page, clothing_type);
       });
     }, [page]);
   
     // Load the items from the API
-    const loadItems = async (page, type) => {
+    const loadItems = async (page, clothing_type) => {
       setLoading(true);
       try {
-        const data = await fetchItems(page, prediction, "black", gender, type);
-        setItems(prevItems => ({ ...prevItems, [type]: data.results }));
+        const data = await fetchItems(page, clothing_type, "black", gender);
+        setItems(prevItems => ({ ...prevItems, [clothing_type]: data.results }));
         setTotalPages(data.count / items_per_page);
       } catch (error) {
         console.error("Error loading items:", error);
@@ -113,11 +112,11 @@ export default function Results() {
             containerStyles='mt-16'
           />
         }
-        renderItem={({ item: type }) => (
+        renderItem={({ item: clothing_type }) => (
           <View className='px-4'>
-            <Text className='text-white text-xl'>{type}</Text>
+            <Text className='text-white text-xl'>{clothing_type}</Text>
             <ScrollView horizontal>
-              {items[type]?.map((item: Picture) => (
+              {items[clothing_type]?.map((item: Picture) => (
                 <View key={item.picture_id} className='mr-4'>
                   <Image source={{ uri: item.image_url }} style={styles.categoryImage}/>
                 </View>
@@ -127,7 +126,7 @@ export default function Results() {
             
             <CustomButton
               title="View More"
-              handlePress={() => router.push('/bottom')}
+              handlePress={() => router.push({pathname: "/productlist", params: {clothing_type: clothing_type, gender: gender, colors: color}})}
               containerStyles="flex-end ml-40 my-2 align-right"
             />
           </View>
