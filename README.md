@@ -1,50 +1,40 @@
-# Welcome to your Expo app 👋
+# Smart Wardrobe Frontend app code
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repository contains the frontend react-native powered app that we've built for our project.
 
 ## Get started
 
-1. Install dependencies
+Firstly, ensure that both Node and npm are installed on the computer you wish to run the frontend server from. For our development, we used Node 21.7.3 and npm 10.5.0 (I reccomend using nvm to get the exact versions required).
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Next, you'll need to install the dependencies with the command below.
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+After installing the dependencies, you can start the app with the following command
 
-## Learn more
+```bash
+ npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Using the app on a phone
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+While the app is cross-platform and should work across all devices, it is currently only optimised for Apple iPhones (as we all own them), so I'd reccomend running it on an iPhone if applicable.
 
-## Join the community
+Firstly, you'll need to download the Expo Go app from the app store (White icon with a triangle and little circle). After downloading the app, run the app code here by using the command above. When the app has started, it'll give you a QR code that you can scan on your device (Please make sure that both the computer running the frontend code and the phone using the app are on the same internet connection).
 
-Join our community of developers creating universal apps.
+You can scan the QR code and it should open the Expo Go app automatically with the app.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Fixes for the API
+
+If you're running the API locally, you'll also need to change the API's address as it will need to point to your local computer or computer that is also running the API. In the file under `app/api.ts`, you will see some variables for the api urls.
+
+```javascript
+import { Picture } from "./types";
+
+//const API_URL = 'https://colt-great-poorly.ngrok-free.app';
+const API_URL = "http://192.168.20.15:8000";
+```
+
+Simply change the api url to your computer's local IP address, along with port 8000, and reload the app.
