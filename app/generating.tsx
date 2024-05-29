@@ -29,6 +29,8 @@ export default function Generating() {
       setPrediction(data.predictions);
       SetReccomendedTypes(data.reccomended_types);
       setColor(data.color);
+      console.log(data.color)
+      // Fix this to pass down colour
     } catch (error) {
       console.error('Error:', error);
     }
