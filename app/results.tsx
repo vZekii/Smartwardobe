@@ -8,7 +8,8 @@ import { Picture } from './types';
 export default function Results() {
     const params = useLocalSearchParams();
     const photo = params.photo;
-    const prediction = params.prediction;
+    const prediction = params.prediction?.toString();
+    console.log(prediction)
     const gender = params.gender;
     const reccomended_types = params.reccomended_types.split(',');
     const color = params.color;
@@ -19,6 +20,22 @@ export default function Results() {
     const [page, setPage] = React.useState(1);
     const [totalPages, setTotalPages] = React.useState(1);
     const [loading, setLoading] = React.useState({});
+    
+    const colours = "black,dark_gray,light_gray,white,light_red,dark_red,orange,yellow,light_green,dark_green,light_blue,dark_blue,purple,pink,brown,beige";
+    
+    // Convert the clothing types from the database to more readable text
+    const type_text_conversion = {
+      "coat_jacket": "Coat/Jacket",
+      "jeans": "Jeans",
+      "shirt": "Shirt",
+      "pants": "Pants",
+      "shorts": "Shorts",
+      "sweats_hoods": "Sweats/Hoods",
+      "tshirt": "T-Shirt",
+      "dress": "Dress",
+      "skirt": "Skirt",
+    };
+
 
     const handleLoadStart = (id) => {
       setLoading(prevState => ({ ...prevState, [id]: true }));
@@ -27,35 +44,6 @@ export default function Results() {
     const handleLoadEnd = (id) => {
       setLoading(prevState => ({ ...prevState, [id]: false }));
     };
-
-    // React.useEffect(() => {
-    //   // Load the items when the page loads
-    //   loadItems(page);
-    // }, [page]);
-
-    // // Load the items from the API
-    // const loadItems = async (page) => {
-    //   setLoading(true);
-    //   try {
-    //     const data = await fetchItems(page, prediction, "black", gender);
-    //     setItems(prevItems => [...prevItems, ...data.results]);
-    //     console.log('results:', data.results);
-    //     console.log('items:', items);
-    //     setTotalPages(data.count / items_per_page);
-    //   } catch (error) {
-    //     console.error("Error loading items:", error);
-    //   }
-    //   setLoading(false);
-    // };
-  
-    // const renderItem= ({ item }) => (
-    //   <View>
-    //     <Image
-    //       source={{ uri: item.image_url }}  // Load image from the URL
-    //     />
-    //     <Text>{item.name}</Text>
-    //   </View>
-    // );
 
     React.useEffect(() => {
       // Load the items when the page loads
@@ -69,7 +57,7 @@ export default function Results() {
     const loadItems = async (page, clothing_type) => {
       setLoading(true);
       try {
-        const data = await fetchItems(page, clothing_type, "black", gender);
+        const data = await fetchItems(page, clothing_type, colours, gender);
         setItems(prevItems => ({ ...prevItems, [clothing_type]: data.results }));
         setTotalPages(data.count / items_per_page);
       } catch (error) {
@@ -114,7 +102,7 @@ export default function Results() {
         }
         renderItem={({ item: clothing_type }) => (
           <View className='px-4'>
-            <Text className='text-white text-xl'>{clothing_type}</Text>
+            <Text className='text-white text-xl'>{type_text_conversion[clothing_type]}</Text>
             <ScrollView horizontal>
               {items[clothing_type]?.map((item: Picture) => (
                 <View key={item.picture_id} className='mr-4'>

@@ -15,6 +15,23 @@ export default function ProductList() {
   const [loading, setLoading] = React.useState(false);
   const [items, setItems] = React.useState([]);
   const [totalPages, setTotalPages] = React.useState(1);
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  // Convert the clothing types from the database to more readable text
+  const type_text_conversion = {
+    "coat_jacket": "Coat/Jacket",
+    "jeans": "Jeans",
+    "shirt": "Shirt",
+    "pants": "Pants",
+    "shorts": "Shorts",
+    "sweats_hoods": "Sweats/Hoods",
+    "tshirt": "T-Shirt",
+    "dress": "Dress",
+    "skirt": "Skirt",
+  };
+  
+  // Use all colours for now
+  const colours = "black,dark_gray,light_gray,white,light_red,dark_red,orange,yellow,light_green,dark_green,light_blue,dark_blue,purple,pink,brown,beige";
 
   // Load the items
   React.useEffect(() => {
@@ -25,10 +42,11 @@ export default function ProductList() {
   const loadItems = async (page, clothing_type) => {
     setLoading(true);
     try {
-      const data = await fetchItems(page, clothing_type, "black", gender);
+      const data = await fetchItems(page, clothing_type, colours, gender);
       setTotalPages(data.count / items_per_page);
       setTotalResults(data.count);
       setItems(prevItems => [...prevItems, ...data.results]);
+      setCurrentPage(prevPage => prevPage + 1); // Increment the current page
     } catch (error) {
       console.error("Error loading items:", error);
     }
@@ -52,7 +70,7 @@ export default function ProductList() {
 
   return (
     <View className='bg-background flex-1 pt-12'>
-      <Text className='text-white text-center text-2xl font-psemibold'>{clothing_type}</Text>
+      <Text className='text-white text-center text-2xl font-psemibold'>{type_text_conversion[clothing_type]}</Text>
       <Text className='text-white text-center text-base font-pregular pb-2'>Showing {items.length} of {totalResults} results</Text>
       <FlatList
         data={items}
@@ -60,6 +78,12 @@ export default function ProductList() {
         keyExtractor={item => item.picture_id.toString()}
         numColumns={2}
         className="m-auto"
+        onEndReached={() => {
+          if (currentPage <= totalPages) {
+            loadItems(currentPage, clothing_type);
+          }
+        }}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );
